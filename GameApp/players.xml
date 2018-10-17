@@ -1,0 +1,70 @@
+<object-stream>
+  <list>
+    <Players.Player>
+      <name>Test</name>
+      <username>Test1     </username>
+      <winnerQuote>WINNER WINNER CHICKEN DINNER! </winnerQuote>
+      <token>X</token>
+      <score>2</score>
+      <gamesWon>2</gamesWon>
+      <gamesLost>0</gamesLost>
+      <tempScore>2</tempScore>
+      <tempScoreLost>0</tempScoreLost>
+    </Players.Player>
+    <Players.Player>
+      <name>Test</name>
+      <username>Test2     </username>
+      <winnerQuote>VICTORY ROYALE!</winnerQuote>
+      <token>O</token>
+      <score>0</score>
+      <gamesWon>0</gamesWon>
+      <gamesLost>1</gamesLost>
+      <tempScore>0</tempScore>
+      <tempScoreLost>1</tempScoreLost>
+    </Players.Player>
+    <Players.Player>
+      <name>Test</name>
+      <username>Test3     </username>
+      <winnerQuote>Test3      is the best!</winnerQuote>
+      <token>c</token>
+      <score>0</score>
+      <gamesWon>0</gamesWon>
+      <gamesLost>0</gamesLost>
+      <tempScore>0</tempScore>
+      <tempScoreLost>0</tempScoreLost>
+    </Players.Player>
+    <Players.Player>
+      <name>Gergo</name>
+      <username>GergSzlav </username>
+      <winnerQuote>WINNER WINNER CHICKEN DINNER!</winnerQuote>
+      <token>X</token>
+      <score>5</score>
+      <gamesWon>2</gamesWon>
+      <gamesLost>0</gamesLost>
+      <tempScore>2</tempScore>
+      <tempScoreLost>0</tempScoreLost>
+    </Players.Player>
+    <Players.Player>
+      <name>Piotr</name>
+      <username>PiotrA    </username>
+      <winnerQuote>PiotrA     is the best!</winnerQuote>
+      <token>c</token>
+      <score>0</score>
+      <gamesWon>0</gamesWon>
+      <gamesLost>1</gamesLost>
+      <tempScore>0</tempScore>
+      <tempScoreLost>1</tempScoreLost>
+    </Players.Player>
+    <Players.Player>
+      <name>Ashlung</name>
+      <username>FairyBrain</username>
+      <winnerQuote>Lol u loser</winnerQuote>
+      <token>f</token>
+      <score>0</score>
+      <gamesWon>0</gamesWon>
+      <gamesLost>1</gamesLost>
+      <tempScore>0</tempScore>
+      <tempScoreLost>1</tempScoreLost>
+    </Players.Player>
+  </list>
+</object-stream>

@@ -1,0 +1,98 @@
+package Players;
+
+import Boards.ConnectFourBoard;
+
+public class Player {
+	private String name;
+	private String username;
+	private String winnerQuote;
+	private String token;
+	private int score;
+	private int gamesWon;
+	private int gamesLost;
+	
+	public Player(String name,String username,String winnerQuote,String token) {
+		this.name = name;
+		this.username = username;
+		this.winnerQuote = winnerQuote;
+		this.token = token;
+		score = 0;
+		gamesWon = 0;
+		gamesLost = 0;
+		
+		if (ConnectFourBoard.player1Winner() || ConnectFourBoard.player2Winner()) {
+			score += 1;
+			gamesWon += 1;
+		} else {
+			gamesLost += 1;
+		}
+	}
+	
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getWinnerQuote() {
+		return winnerQuote;
+	}
+
+	public void setWinnerQuote(String winnerQuote) {
+		this.winnerQuote = winnerQuote;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int getGamesWon() {
+		return gamesWon;
+	}
+
+	public void setGamesWon(int gamesWon) {
+		this.gamesWon = gamesWon;
+	}
+
+	public int getGamesLost() {
+		return gamesLost;
+	}
+
+	public void setGamesLost(int gamesLost) {
+		this.gamesLost = gamesLost;
+	}
+	
+	
+	
+	
+	public String toString() {
+		return username + "    " + score+"       "+gamesWon+"     "+gamesLost;
+		
+	}
+	
+	
+}

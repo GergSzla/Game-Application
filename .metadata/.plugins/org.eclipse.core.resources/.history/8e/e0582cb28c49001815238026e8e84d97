@@ -1,0 +1,349 @@
+package Game;
+import java.util.*;
+import Players.*;
+import Boards.*;
+
+public class GameSystem {
+	private  Scanner input;						//Create a Scanner object called input that can be used by all methods in the class.
+    private static PlayerList gamers;
+    
+    
+    
+    public GameSystem(){
+    	input = new Scanner(System.in);
+    	gamers = new PlayerList ();
+    }
+    
+    public static void main(String args[]) throws Exception{
+    	
+		    	GameSystem app = new GameSystem();  
+		    	try{
+			   		gamers.load();
+			   		System.out.println("***Data Loaded Successfully***");
+		   			}
+		   			catch(Exception e){
+		   			System.out.println("Error loading from file:  " + e);
+		   			}
+	        	app.runMenu();
+                
+	}
+    
+    private int mainMenu()
+    { 
+    	System.out.println("\n\n============================================================");
+    	System.out.println("||                        Game Menu                       ||");
+    	System.out.println("============================================================");
+        System.out.println("||  1) New Player                                         ||");     
+        System.out.println("||  2) Remove players                                     ||");
+        System.out.println("||  3) Leaderboard                                        ||");
+        System.out.println("||  4) Existing players                                   ||");
+        System.out.println("||  5) Update Player                                      ||");
+        System.out.println("||--------------------------------------------------------||"); 
+        System.out.println("||  6) Play                                               ||");       
+        System.out.println("||--------------------------------------------------------||"); 
+        System.out.println("||  7) Save                                               ||");
+        System.out.println("||  8) Load                                               ||");
+        System.out.println("||  0) Exit                                               ||");
+        System.out.print(  "||==>>");
+         int option = input.nextInt();
+         return option;
+    }
+    
+    private void runMenu()
+    {
+        int option = mainMenu();
+        do
+        
+        {
+
+            switch (option)
+            {
+            case 1:    	addPlayer();
+           				break;
+            case 2:    	removePlayer();
+            			break;
+          //  case 3:    	
+			//			break;
+            case 4:    	System.out.println(gamers.listPlayers());
+						break;
+            case 5:    	updatePlayerInfo();   //prints the time and date the program last began running
+			            break;
+            case 6:    	runGameMenu(); //the open hours of the gym including how long until it opens/closes
+                        break;
+            case 7:     try{
+				        gamers.save();
+				        System.out.println("***Saved successfully***");
+			            }
+			   			catch(Exception e){
+			   			System.out.println("Error writing to file:  " + e);
+			   			}
+			    		break;
+            case 8:     try{
+				   		gamers.load();
+			   			}
+			   			catch(Exception e){
+			   			System.out.println("Error loading from file:  " + e);
+			   			}
+			    		break;
+						
+                default:   System.out.println("Invalid option entered: " + option);
+                        
+            }
+
+            //display the main menu again
+            option = mainMenu();
+        }while (option != 0);
+
+        //the user chose option 0, so exit the program
+        System.out.println("Exiting... bye");
+        System.exit(0);
+    }
+    
+    private void addPlayer()
+    {
+    	System.out.println("\n\n================================================================");
+    	System.out.println("||                    Player Registration                     ||");
+    	System.out.println("================================================================");
+        System.out.println("|| Please enter the following player details...");
+
+        System.out.print("||\tName: ");
+        String name = input.nextLine();
+        name = input.nextLine();
+        
+        while (!name.matches("[a-zA-Z' ]*")|| (name.isEmpty())){           //if player name is empty or doesn't contain alphabetic characters or ' or space
+        	System.out.println("||***Input contains invalid characters. Try again.");  //returns an error and repeats until valid
+        	System.out.print("||\tName: ");
+	        name = input.nextLine();
+        }
+        
+        System.out.print("||\tUsername: ");
+        String username = input.nextLine();
+        while (username.length() > 10 || username.length() < 4|| username.isEmpty()){           
+        	System.out.println("||***Username cannot be empty. Max. 10 characters and min. 4 characters");  //returns an error and repeats until valid
+        	System.out.print("||\tUsername: ");
+	        username = input.nextLine();
+        }
+        while (username.length() >= 4 && username.length() < 10) {  //fills up username space to 10 characters to organize
+        	username += " ";
+        }
+        
+
+        System.out.print("||\tWinner Quote: ");
+        String winnerQuote= input.nextLine();
+        if (winnerQuote.isEmpty()) {
+        	winnerQuote = username + " is the best!"; //default winner quote
+        } 
+
+        System.out.print("||\tToken: ");
+        String token = input.nextLine();
+        while (token.isEmpty() || token.length() > 2 || token.equalsIgnoreCase("g") || token.equalsIgnoreCase("gg") ){           
+        	System.out.println("||***Input contains invalid characters.\tToken can only be 2 characters, g/G is reserverd. \tTry again."); 
+        	System.out.print("||\tToken: ");
+	        token = input.nextLine();
+        }
+		
+      
+        gamers.add(new Player(name, username, winnerQuote, token));
+    }
+    
+    public void removePlayer()
+    {
+    	
+    	System.out.println("\n============================================================");
+    	System.out.println("||                      Remove a Player                   ||");
+    	System.out.println("============================================================");
+    	//List the Members and ask the user to choose which account to delete
+    	System.out.println(gamers.listPlayers());
+    	if(gamers.getPlayers().size()!=0)
+    	{
+    		//Only process the delete if products exist in the Arraylist
+    	   	System.out.println("||Index of player to remove ==>");
+    	   	int index = input.nextInt();
+        
+    	   	if(index<gamers.getPlayers().size())
+    	   	{
+    	   		//If the index number exists in the Arraylist, delete it from the arraylist
+    	   		gamers.getPlayers().remove(index);
+    	   		System.out.println("||**Player Removed**");
+    	   	}
+    	   	else
+    	   	{
+    	   		System.out.println("||**There is no player for this index number");
+    	   	}
+       	}
+    }
+    
+    private void updatePlayerInfo(){
+    	System.out.println("\n============================================================");
+    	System.out.println("||                      Update a Player                   ||");
+    	System.out.println("============================================================");
+		System.out.println(gamers.listPlayers());
+
+		if (gamers.getPlayers().size() != 0){	
+			//only process the update if DVDs exist in the ArrayList
+			System.out.print("Index of player to edit ==>");
+			int index = input.nextInt();
+
+			if (index < gamers.getPlayers().size()){	
+				//if the index number exists in the ArrayList, gather the new details from the user
+				System.out.print("   Enter a new username: ");
+				String un = input.nextLine();
+				un = input.nextLine();
+				while (un.length() > 10 || un.length() < 4|| un.isEmpty()){           
+		        	System.out.println("||***Username cannot be empty. Max. 10 characters and min. 4 characters");  //returns an error and repeats until valid
+		        	System.out.print("||\tUsername: ");
+			        un = input.nextLine();
+		        }
+		        while (un.length() >= 4 && un.length() < 10) {  //fills up username space to 10 characters to organize
+		        	un += " ";
+		        }
+				
+				System.out.print("   Enter a new winner quote: ");
+				String wq = input.nextLine();
+
+				//retrieve the Book from the ArrayList and update the details with the user input
+				Player player = gamers.getPlayers().get(index);
+				player.setUsername(un);
+				player.setWinnerQuote(wq);
+			}
+			else
+			{
+				System.out.println("There is no player for this index number");
+			}
+		}
+    
+    }
+    
+    
+ 
+    
+    private int gameMenu()
+    { 
+    	System.out.println("\n\n============================================================");
+    	System.out.println("||                        Game Menu                       ||");
+    	System.out.println("============================================================");
+        System.out.println("||Chose a game to play:                                   ||");     
+        System.out.println("||  1) Connect Four                                       ||");
+        System.out.println("||  2) Tic Tac Toe                                        ||");
+        System.out.println("||--------------------------------------------------------||"); 
+        System.out.println("||  3) Back                                               ||");       
+        System.out.println("||--------------------------------------------------------||"); 
+        System.out.print(  "||==>>");
+         int gameOption = input.nextInt();
+         return gameOption;
+    }
+    
+    private void runGameMenu()
+    {
+        int gameOption = gameMenu();
+        do
+        
+        {
+
+            switch (gameOption)
+            {
+            case 1:     System.out.println(gamers.listPlayers());
+						System.out.println("Choose a Player (1)");
+						int index = input.nextInt();
+						String player1 = gamers.getPlayers().get(index).getUsername();
+						String wq1 = gamers.getPlayers().get(index).getWinnerQuote();
+						String t1 = gamers.getPlayers().get(index).getToken();
+						int score1 = gamers.getPlayers().get(index).getScore();
+						System.out.println("Choose a Player (2)");
+					    index = input.nextInt();
+						String player2 = gamers.getPlayers().get(index).getUsername();
+						String wq2 = gamers.getPlayers().get(index).getWinnerQuote();
+						String t2 = gamers.getPlayers().get(index).getToken();
+						int score2 = gamers.getPlayers().get(index).getScore();
+            			System.out.println("What size do you want the board to be?");
+            			System.out.println("Width:");
+            			int x = input.nextInt();
+            			while (x < 4 || x > 15) {
+            				System.out.println("Invalid size. Min: 4. Max 15.");
+            				System.out.println("Height:");
+                			x = input.nextInt();
+            			}
+            			System.out.println("Height:");
+            			int y = input.nextInt();
+            			while (y < 4 || y > 15) {
+            				System.out.println("Invalid size. Min: 4. Max 15.");
+            				System.out.println("Height:");
+                			y = input.nextInt();
+            			}
+            						
+            			ConnectFourBoard game1 = new ConnectFourBoard(x,y,player1, player2, wq1, wq2, t1, t2,score1 , score2);
+        	        	game1.playC4();
+        	        	if (game1.player1Winner() || game1.player2Winner()) {
+        	    			int score = 1;
+        	    			Player player = gamers.getPlayers().get(index);
+        	    			player.addScore(score);
+        	    		}
+        	        	if (!game1.player1Winner() || !game1.player2Winner()){
+        	    			int gamesLost = 1;
+        	    			Player player = gamers.getPlayers().get(index);
+        	    			player.lostScore(gamesLost);
+        	    		}
+           				break;
+           // case 2:    	playTicTacToe();
+    //        			break;*/
+            case 3:    	runMenu();
+						break;
+						
+            default:   System.out.println("Invalid option entered: " + gameOption);
+                        
+            }
+
+            //display the main menu again
+            gameOption = gameMenu();
+        }while (gameOption != 0);
+
+        //the user chose option 0, so exit the program
+        System.out.println("Exiting... bye");
+        System.exit(0);
+    }
+    private int playerMenu()
+    { 
+    	System.out.println("\n\n============================================================");
+    	System.out.println("||                        Game Menu                       ||");
+    	System.out.println("============================================================");
+        System.out.println("||Chose a game to play:                                   ||");     
+        System.out.println("||  1) Make A New Player                                  ||");
+        System.out.println("||  2) Play As guest                                      ||");
+        System.out.println("||  3) Play As Existing Player                            ||");
+        System.out.println("||--------------------------------------------------------||"); 
+        System.out.println("||  4) Back                                               ||");       
+        System.out.println("||--------------------------------------------------------||"); 
+        System.out.print(  "||==>>");
+         int playerOption = input.nextInt();
+         return playerOption;
+    }
+    
+    private void GamePlayerMenu()
+    {
+        int playerOption = playerMenu();
+        do
+        
+        {
+
+            switch (playerOption)
+            {
+            case 1:     addPlayer();
+           				break;
+           // case 2:   play as guest();
+            //			break;
+         //  case 3:    play as existing player
+			//			break;
+            case 4:    	runMenu();
+						break;
+						
+            default:   System.out.println("Invalid option entered: " + playerOption);
+                        
+            }
+
+            //display the main menu again
+            playerOption = gameMenu();
+        }while (playerOption != 0);
+        System.out.println("Exiting... bye");
+        System.exit(0);
+    }
+}

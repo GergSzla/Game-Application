@@ -1,0 +1,236 @@
+package Boards;
+import java.util.*;
+
+import Players.*;
+
+public class ConnectFourBoard extends Board {
+
+	public ConnectFourBoard(int x, int y, String player1, String player2, String wq1, String wq2, String token1, String token2, int score1, int score2) {
+		super(x, y, player1, player2, wq1, wq2, token1, token2, score1, score2);
+		board = new int[WIDTH][HEIGHT];
+	}
+	
+    int WIDTH = x;
+    int HEIGHT = y;
+
+    
+    //creates scanner
+    Scanner scanner = new Scanner(System.in);
+
+    public void playC4(){
+    	int maximumMoves = x-1;
+    	System.out.println("\n\n============================================================");
+    	System.out.println("||                       Connect Four                     ||");
+    	System.out.println("============================================================");
+    	System.out.println("Please choose a column to place your token. (Between 0-"+maximumMoves+")");
+        outer:
+        while(true){
+            int column=0;
+            
+            //PLAYER 1.
+            while(true){
+            System.out.println("\n\n"+player1+" play:");
+            column=scanner.nextInt();
+            while (column > maximumMoves) {
+            	System.out.println("Invalid input. Try a number between 0 and "+maximumMoves);
+            	column = scanner.nextInt();
+            }
+                if(isPlayable(column)){
+                    if(playMove(column, 1)){
+                        printBoard();
+                        System.out.println("\n\n"+player1+" wins!!!");
+                        System.out.println(wq1);
+                        
+                        inGameWon1 +=1;
+                        break outer;
+                    }
+                    break;
+                }
+                else
+                    System.out.println("Column "+column+" is already full!!");
+            }
+            printBoard();
+            
+            //PLAYER 2.    
+            while(true){
+            System.out.println("\n\n"+player2+" play:");
+            column=scanner.nextInt();
+            while (column > maximumMoves) {
+            	System.out.println("Invalid input. Try a number between 0 and "+maximumMoves);
+            	column = scanner.nextInt();
+            }
+                if(isPlayable(column)){
+                    if(playMove(column, 2)){
+                        printBoard();
+                        System.out.println("\n\n"+player2+" wins!!!");
+                        System.out.println(wq2); 
+                        
+                        inGameWon2 += 1;
+
+                        break outer;
+                    }
+                    break;
+                }
+                else
+                    System.out.println("Column "+column+" is already full!!");
+            }
+            printBoard();
+            
+            if(isFull()){
+                System.out.print("Draw.");
+                break;
+            }
+            if (player1Winner()) {
+            	inGameLost2+=1;
+            	score1 += inGameWon1;
+            	System.out.println(player1 + "won: "+inGameWon1+" Lost "+inGameLost1);
+                System.out.println(player2 + "won: "+inGameWon2+" Lost "+inGameLost2);
+            }
+            if (player2Winner()) {
+            	inGameLost1+=1;
+            	score2 += inGameWon2;
+            	System.out.println(player1 + "won: "+inGameWon1+" Lost "+inGameLost1);
+                System.out.println(player2 + "won: "+inGameWon2+" Lost "+inGameLost2);
+            }
+        }
+    }
+    
+                
+    public void printBoard(){
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j] == 0)
+                    System.out.print("_  ");
+                else
+                    System.out.print(board[i][j]+"  ");
+            }
+            System.out.println();
+        }
+        
+        for(int i=0;i<WIDTH;i++)
+            System.out.print("*  ");
+        System.out.println();
+        
+        for(int i=0;i<WIDTH;i++)
+            System.out.print(i+"  ");
+        System.out.println();
+    }
+    
+    public boolean playMove(int column, int playerNum){
+        int i=0;
+        for(i=0;i<HEIGHT;i++){
+            if(board[i][column] == 1 || board[i][column] == 2){
+                board[i-1][column]=playerNum;
+                break;
+            }
+        }
+        if(i == HEIGHT)
+            board[i-1][column]=playerNum;
+        
+        totalMovesPlayed++;
+        return isConnected(i-1,column);
+    }
+    
+    public boolean isPlayable(int column){
+        return board[0][column] == 0; 
+    }
+    
+    public boolean isFull(){
+        return totalMovesPlayed == HEIGHT*WIDTH;
+    }
+    
+    public boolean isConnected(int x, int y){
+        int num=board[x][y];
+        int count=0;
+        int i=y;
+
+        
+        //HORIZONTAL.
+        while(i<WIDTH && board[x][i] == num){
+            count++;
+            i++;
+        }
+        i=y-1;
+        while(i>=0 && board[x][i] == num){
+            count++;
+            i--;
+        }
+        if(count == 4) 
+            return true;
+        
+        //VERTICAL.
+        count=0;
+        int j=x;
+        while(j<HEIGHT && board[j][y] == num){
+            count++;
+            j++;
+        }
+        if(count == 4)
+            return true;
+        
+        //SECONDARY DIAGONAL.
+        count=0;
+        i=x;
+        j=y;
+        while(i<WIDTH && j<HEIGHT && board[i][j] == num){
+            count++;
+            i++;
+            j++;
+        }
+        i=x-1;
+        j=y-1;
+        while(i>=0 && j>=0 && board[i][j] == num){
+            count++;
+            i--;
+            j--;
+        }
+        if(count == 4)
+            return true;
+        
+        //LEADING DIAGONAL.
+        count=0;
+        i=x;
+        j=y;
+        while(i<WIDTH && j>=0 && board[i][j] == num){
+            count++;
+            i++;
+            j--;
+        }
+        i=x-1;
+        j=y+1;
+        while(i>=0 && j<HEIGHT && board[i][j] == num){
+            count++;
+            i--;
+            j++;
+        }
+        if(count == 4)
+            return true;
+        
+        return false;
+    
+    }
+    
+    public boolean player1Winner() {
+        if (inGameWon1  > 0 ) 
+        	return true;
+        	/*inGameLost2+=1;
+        	score1 += inGameWon1;
+        	System.out.println(player1 + "won: "+inGameWon1+" Lost "+inGameLost1);
+            System.out.println(player2 + "won: "+inGameWon2+" Lost "+inGameLost2);*/
+		return false;
+        
+
+    	
+    }
+    
+    public boolean player2Winner() {
+        if (inGameWon2  > 0 )
+        	return true;
+        	/*inGameLost1+=1;
+        	score2 += inGameWon2;
+        	System.out.println(player1 + "won: "+inGameWon1+" Lost "+inGameLost1);
+            System.out.println(player2 + "won: "+inGameWon2+" Lost "+inGameLost2);*/
+		return false;
+    	
+    }
+}
